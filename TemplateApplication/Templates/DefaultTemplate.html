@@ -1,0 +1,152 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Sample Template</title>
+    <style>
+        .mainTable, th,td
+        {
+            border : 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <table class="mainTable">
+            <caption>A Sample Template</caption>
+            <tr>
+                <th colspan="3">
+                    Invoice #009891789
+                </th>
+                <th>
+                    Date of Joining : $dateOfJoining
+                </th>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <strong>PAN</strong><br />
+                    $panNumber
+                </td>
+                <td colspan="2">
+                    <strong>Pay to:</strong><br />
+                    $name
+                </td>
+            </tr>
+            <tr>
+                <td colspan="5">
+                    <strong>Designation</strong><br />
+                    $designation
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <strong>
+                        Account Number :
+                    </strong>
+                    $accountNumber
+                </td>
+                <td colspan="2">
+                    <strong>
+                        Salary :
+                    </strong>
+                    $salary
+                </td>
+            </tr>
+          <tr>
+              <td colspan="2">
+                  <table class="additionDetails">
+                      <caption><strong>Addition Details</strong></caption>
+                      <tr>
+                          <th>
+                              Addition
+                          </th>
+                          <th>
+                              Addition Sum
+                          </th>
+                      </tr>
+                      <!--<tr>
+                          <td>
+                              Basic Pay
+                          </td>
+                          <td>
+                              120.00
+                          </td>
+                      </tr>
+                      <tr>
+                          <td>
+                              Special Allowance
+                          </td>
+                          <td>
+                              100.00
+                          </td>
+                      </tr>
+                      <tr>
+                          <td>
+                              House Rent Allowance
+                          </td>
+                          <td>
+                              100.00
+                          </td>
+                      </tr>
+                      <tr>
+                          <td>
+                              Balance
+                          </td>
+                          <td>
+                              50.00
+                          </td>
+                      </tr>
+                      <tr>
+                          <td>
+                              Travel
+                          </td>
+                          <td>
+                              50.00
+                          </td>
+                      </tr>-->
+                      $additionResult
+                  </table>
+              </td>
+              <td colspan="2">
+                  <table class="subtractionDetails">
+                      <caption><strong>Subtraction Details</strong></caption>
+                      <tr>
+                          <th>
+                              Subtraction
+                          </th>
+                          <th>
+                              Subtraction Sum
+                          </th>
+                      </tr>
+                      <!--<tr>
+                          <td>
+                              Professional Tax
+                          </td>
+                          <td>
+                              12.00
+                          </td>
+                      </tr>
+                      <tr>
+                          <td>
+                              Tax Deducted At Source
+                          </td>
+                          <td>
+                              12.00
+                          </td>
+                      </tr>
+                      <tr>
+                          <td>
+                              Excise Duty Tax
+                          </td>
+                          <td>
+                              15.00
+                          </td>
+                      </tr>-->
+                      $subtractionResult
+                  </table>
+              </td>
+          </tr>
+        </table>
+           <!--$employeeSalaryBreakup-->
+</body>
+</html>
