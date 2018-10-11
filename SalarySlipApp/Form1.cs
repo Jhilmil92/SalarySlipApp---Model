@@ -27,6 +27,7 @@ namespace SalarySlipApp
             dataGridView.Hide();
             addOuterPanel.Hide();
             deductOuterPanel.Hide();
+            requiredName.Select();
         }
 
         private void generateButton_Click(object sender, EventArgs e)
@@ -66,11 +67,8 @@ namespace SalarySlipApp
                 foreach(var component in componentCollection)
                 {
                     string[] componentParts = componentBuilder.Append(component).ToString().Split('=');
-                    //string ruleValidationInput = componentParts[0].Split(':')[1]; //may not be needed
                     componentParts = componentParts[0].Split(',');
-                    //ruleHolder.Append(ruleValidationInput);//may not be needed
-                    ((TextBox)component).Validating += validateRuleName_Validation;
-                    ruleHolder.Clear();
+                   // ((TextBox)component).Validating += validateRuleName_Validation;
                     if ((componentParts != null) && (componentParts.Count() > 0))
                     {
                         userRules.Add(new Rules()
@@ -87,10 +85,20 @@ namespace SalarySlipApp
             return userRules;
         }
 
-        private void validateRuleName_Validation(object sender, EventArgs e)
+        private void validateRuleName_Validation(object sender, CancelEventArgs e)
         {
             TextBox senderControl = (TextBox)sender;
-            
+            string textBoxInput = senderControl.Text.TrimStart(' ').TrimEnd(' '); //check line for first if case.
+            if (string.IsNullOrEmpty(textBoxInput))
+            {
+                MessageBox.Show(string.Format("No value entered for text box {0}", senderControl.Name), "Salary Slip Application", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                senderControl.Focus();
+            }
+            else if(!(RegularExpressionValidator.IsValidComponentValuePair(textBoxInput)))
+            {
+                MessageBox.Show(string.Format("The Name,Value pair {0} of textbox {1} is not in proper format",senderControl.Text,senderControl.Name), "Salary Slip Application", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                senderControl.Focus();
+            }
         }
 
 
@@ -306,6 +314,7 @@ namespace SalarySlipApp
                 addOuterPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
                 leftAddTextBox.Text = string.Format("Component Name{0},Value{0}", i + 1);
                 leftAddTextBox.Name = string.Format("addComponentTextBox{0}", i + 1);
+                leftAddTextBox.Validating += validateRuleName_Validation;
                 //rightAddTextBox.Text = string.Format("Value{0}",i+1);
                 //rightAddTextBox.Name = string.Format("rightTextBox{0}", i + 1);
                 addOuterPanel.Show();
@@ -325,19 +334,14 @@ namespace SalarySlipApp
             for (int i = 0; i < numberOfTextBoxes; i++)
             {
                 TextBox leftDeductTextBox = new TextBox();
-                //TextBox rightDeductTextBox = new TextBox();
-                //rightDeductTextBox.Size = new System.Drawing.Size(60, 200);
                 leftDeductTextBox.Location = new Point(xCoordinate, yCoordinate);
                 leftDeductTextBox.Size = new System.Drawing.Size(160, 100);
-                //rightDeductTextBox.Location = new Point(xCoordinate + 110, yCoordinate);
                 deductOuterPanel.Controls.Add(leftDeductTextBox);
-                //deductOuterPanel.Controls.Add(rightDeductTextBox);
                 deductOuterPanel.AutoScroll = true;
                 deductOuterPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
                 leftDeductTextBox.Text = string.Format("Component Name{0},Value{0}", i + 1);
                 leftDeductTextBox.Name = string.Format("deductComponentTextBox{0}", i + 1);
-                //rightDeductTextBox.Text = string.Format("Value{0}", i + 1);
-                //rightDeductTextBox.Name = string.Format("rightTextBox{0}",i+1);
+                leftDeductTextBox.Validating += validateRuleName_Validation;
                 deductOuterPanel.Show();
                 yCoordinate += 20;
             }
@@ -345,7 +349,13 @@ namespace SalarySlipApp
 
         private void requiredName_Validating(object sender, CancelEventArgs e)
         {
-            if(!(RegularExpressionValidator.IsValidName(requiredName.Text)))
+            string textInput = requiredName.Text.TrimStart().TrimEnd();
+            if(string.IsNullOrEmpty(textInput))
+            {
+                MessageBox.Show("No name has been entered", "Salary Slip Application", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                requiredName.Focus();
+            }
+            else if(!(RegularExpressionValidator.IsValidName(textInput)))
             {
                 MessageBox.Show("The entered name is not in proper format","Salary Slip Application",MessageBoxButtons.OK,MessageBoxIcon.Error);
                 requiredName.Focus();
@@ -354,7 +364,13 @@ namespace SalarySlipApp
 
         private void pan_Validating(object sender, CancelEventArgs e)
         {
-            if (!(RegularExpressionValidator.IsValidPan(pan.Text)))
+            string textInput = pan.Text.TrimStart().TrimEnd();
+            if (string.IsNullOrEmpty(textInput))
+            {
+                MessageBox.Show("No PAN has been entered", "Salary Slip Application", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                pan.Focus();
+            } 
+            else if (!(RegularExpressionValidator.IsValidPan(textInput)))
             {
                 MessageBox.Show("The entered PAN is not in proper format", "Salary Slip Application", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 pan.Focus();
@@ -363,7 +379,13 @@ namespace SalarySlipApp
 
         private void accountNumber_Validating(object sender, CancelEventArgs e)
         {
-            if (!(RegularExpressionValidator.IsValidAccountNumber(accountNumber.Text)))
+            string textInput = accountNumber.Text.TrimStart().TrimEnd();
+            if (string.IsNullOrEmpty(textInput))
+            {
+                MessageBox.Show("No account number has been entered", "Salary Slip Application", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                accountNumber.Focus();
+            } 
+            else if (!(RegularExpressionValidator.IsValidAccountNumber(textInput)))
             {
                 MessageBox.Show("The entered account number is not in proper format", "Salary Slip Application", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 accountNumber.Focus();
@@ -372,7 +394,13 @@ namespace SalarySlipApp
 
         private void designation_Validating(object sender, CancelEventArgs e)
         {
-            if (!(RegularExpressionValidator.IsValidDesignation(designation.Text)))
+            string textInput = designation.Text.TrimStart().TrimEnd();
+            if (string.IsNullOrEmpty(textInput))
+            {
+                MessageBox.Show("No designation has been entered", "Salary Slip Application", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                designation.Focus();
+            }
+            else if (!(RegularExpressionValidator.IsValidDesignation(textInput)))
             {
                 MessageBox.Show("The entered designation is not in proper format", "Salary Slip Application", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 designation.Focus();
@@ -381,7 +409,13 @@ namespace SalarySlipApp
 
         private void salary_Validating(object sender, CancelEventArgs e)
         {
-            if (!(RegularExpressionValidator.IsValidSalary(salary.Text)))
+            string textInput = salary.Text.TrimStart().TrimEnd();
+            if (string.IsNullOrEmpty(textInput))
+            {
+                MessageBox.Show("No salary has been entered", "Salary Slip Application", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                salary.Focus();
+            }
+            else if (!(RegularExpressionValidator.IsValidSalary(textInput)))
             {
                 MessageBox.Show("The entered salary is not in proper format", "Salary Slip Application", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 salary.Focus();
@@ -391,7 +425,13 @@ namespace SalarySlipApp
         //Currently Restricted to 10 components
         private void addComponentNumber_Validating(object sender, CancelEventArgs e)
         {
-            if (!(RegularExpressionValidator.IsValidComponentCount(addComponentNumber.Text)))
+            string inputText = addComponent.Text.TrimStart().TrimEnd();
+            if (string.IsNullOrEmpty(inputText))
+            {
+                MessageBox.Show("No addition component count entered", "Salary Slip Application", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                addComponentNumber.Focus();
+            }
+            else if (!(RegularExpressionValidator.IsValidComponentCount(inputText)))
             {
                 MessageBox.Show("Only 10 addition components are allowed", "Salary Slip Application", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 addComponentNumber.Focus();
@@ -400,7 +440,13 @@ namespace SalarySlipApp
 
         private void deductComponentNumber_Validating(object sender, CancelEventArgs e)
         {
-            if (!(RegularExpressionValidator.IsValidComponentCount(deductComponentNumber.Text)))
+            string inputText = deductComponent.Text.TrimStart().TrimEnd();
+            if (string.IsNullOrEmpty(inputText))
+            {
+                MessageBox.Show("No deduction component count entered", "Salary Slip Application", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                deductComponentNumber.Focus();
+            }
+            else if (!(RegularExpressionValidator.IsValidComponentCount(inputText)))
             {
                 MessageBox.Show("Only 10 deduction components are allowed", "Salary Slip Application", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 deductComponentNumber.Focus();

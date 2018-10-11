@@ -80,5 +80,18 @@ namespace SalarySlipApp.RegularExpressionModule
             }
             return isValidInput;
         }
+
+        public static bool IsValidComponentValuePair(string input)
+        {
+            bool isValidInput = false;
+            Regex regularExpression = new Regex("^[a-zA-Z][a-zA-Z\\s]+[a-zA-Z\\d]$");
+            Match match = regularExpression.Match(input);
+            if (match.Success)
+            {
+                isValidInput = true;
+            }
+            return isValidInput;
+        }
+
     }
 }
