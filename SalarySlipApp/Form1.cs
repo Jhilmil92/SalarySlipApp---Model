@@ -68,14 +68,13 @@ namespace SalarySlipApp
                 {
                     string[] componentParts = componentBuilder.Append(component).ToString().Split('=');
                     componentParts = componentParts[0].Split(',');
-                   // ((TextBox)component).Validating += validateRuleName_Validation;
                     if ((componentParts != null) && (componentParts.Count() > 0))
                     {
                         userRules.Add(new Rules()
                         {
                             ComputationName = typeOfOperation,
-                            RuleName = componentParts[1].Split(':')[1], //change
-                            RuleValue = Convert.ToDecimal(componentParts[2]) //change
+                            RuleName = componentParts[1].Split(':')[1],
+                            RuleValue = Convert.ToDecimal(componentParts[2])
                         }
                             );
                     }
@@ -303,20 +302,14 @@ namespace SalarySlipApp
             for(int i = 0; i < numberOfTextBoxes; i++)
             {
                 TextBox leftAddTextBox = new TextBox();
-                //TextBox rightAddTextBox = new TextBox();
-                //rightAddTextBox.Size = new System.Drawing.Size(60, 200);
                 leftAddTextBox.Location = new Point(xCoordinate, yCoordinate);
                 leftAddTextBox.Size = new System.Drawing.Size(160,100);
-                //rightAddTextBox.Location = new Point(xCoordinate + 110, yCoordinate);
                 addOuterPanel.Controls.Add(leftAddTextBox);
-                //addOuterPanel.Controls.Add(rightAddTextBox);
                 addOuterPanel.AutoScroll = true;
                 addOuterPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
                 leftAddTextBox.Text = string.Format("Component Name{0},Value{0}", i + 1);
                 leftAddTextBox.Name = string.Format("addComponentTextBox{0}", i + 1);
-                leftAddTextBox.Validating += validateRuleName_Validation;
-                //rightAddTextBox.Text = string.Format("Value{0}",i+1);
-                //rightAddTextBox.Name = string.Format("rightTextBox{0}", i + 1);
+                //  leftAddTextBox.Validating += validateRuleName_Validation; //uncomment once fixed.
                 addOuterPanel.Show();
                 yCoordinate += 20;
 
@@ -326,8 +319,6 @@ namespace SalarySlipApp
         private void deductComponent_Click(object sender, EventArgs e)
         {
             int numberOfTextBoxes = int.Parse(deductComponentNumber.Text);
-            //int xCoordinate = 30;
-            //int yCoordinate = 40;
             int xCoordinate = 10;
             int yCoordinate = 10;
             deductOuterPanel.Controls.Clear();
@@ -341,7 +332,7 @@ namespace SalarySlipApp
                 deductOuterPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
                 leftDeductTextBox.Text = string.Format("Component Name{0},Value{0}", i + 1);
                 leftDeductTextBox.Name = string.Format("deductComponentTextBox{0}", i + 1);
-                leftDeductTextBox.Validating += validateRuleName_Validation;
+             //   leftDeductTextBox.Validating += validateRuleName_Validation; //uncomment once fixed.
                 deductOuterPanel.Show();
                 yCoordinate += 20;
             }
@@ -425,7 +416,7 @@ namespace SalarySlipApp
         //Currently Restricted to 10 components
         private void addComponentNumber_Validating(object sender, CancelEventArgs e)
         {
-            string inputText = addComponent.Text.TrimStart().TrimEnd();
+            string inputText = addComponentNumber.Text.TrimStart().TrimEnd();
             if (string.IsNullOrEmpty(inputText))
             {
                 MessageBox.Show("No addition component count entered", "Salary Slip Application", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -440,7 +431,7 @@ namespace SalarySlipApp
 
         private void deductComponentNumber_Validating(object sender, CancelEventArgs e)
         {
-            string inputText = deductComponent.Text.TrimStart().TrimEnd();
+            string inputText = deductComponentNumber.Text.TrimStart().TrimEnd();
             if (string.IsNullOrEmpty(inputText))
             {
                 MessageBox.Show("No deduction component count entered", "Salary Slip Application", MessageBoxButtons.OK, MessageBoxIcon.Error);

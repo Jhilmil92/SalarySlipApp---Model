@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
@@ -13,6 +14,13 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using TemplateApp.Classes;
+using System.Web;
+using System.Web.Hosting;
+using System.Security.Principal;
+using System.Security.AccessControl;
+using System.Net.Mime;
+using SalarySlipApp.ExtensionClasses;
+using NReco.PdfGenerator;
 
 namespace SalarySlipApp.Services
 {
@@ -143,37 +151,39 @@ namespace SalarySlipApp.Services
 
         public void SendTemplate(string templateContent)
         {
-            //RemoteCertificateValidationCallback orgCallback = ServicePointManager.ServerCertificateValidationCallback;
-            //ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(OnValidateCertificate);
-            //ServicePointManager.Expect100Continue = true;
-            //MailAddress addressFrom = new MailAddress("jhilmil@vtecsys.com", "Jhilmil");
-            //MailAddress addressTo = new MailAddress("uttam@vtecsys.com");
-            //MailMessage message = new MailMessage(addressFrom, addressTo);
-            //message.Subject = "Salary Slip";
-            //message.IsBodyHtml = true;
-            //message.Body = templateContent;
-            //message.BodyEncoding = System.Text.Encoding.UTF8;
-            //message.DeliveryNotificationOptions = DeliveryNotificationOptions.OnFailure;
+            string pdfFileName = string.Format("{0}{1:dd-MMM-yyyy HH-mm-ss-fff}{2}", "SalarySlip", DateTime.Now,".pdf");
+            string pdfFilePath = @"e:\SalarySlips\";
+            string finalPdfPath = Path.Combine(pdfFilePath, pdfFileName);
 
-            ////SmtpClient client = new SmtpClient();
-            ////client.Port = 587;
-            ////client.Host = "smtp.gmail.com";
-            ////client.EnableSsl = false;
-            ////client.DeliveryMethod = SmtpDeliveryMethod.Network;
-            ////client.UseDefaultCredentials = false;
-            ////client.Credentials = new System.Net.NetworkCredential("jhilmil@vtecsys.com","Jhilmil@92");
-            ////client.Send(message);
+            if (!(Directory.Exists(pdfFilePath)))
+            {
+                Directory.CreateDirectory(pdfFilePath);
+            }
 
-            //using (SmtpClient smtpserver = new SmtpClient())
-            //{
-            //   // smtpserver.Timeout = 5 * 1000;
-            //    smtpserver.DeliveryMethod = SmtpDeliveryMethod.Network;
-            //    smtpserver.Host = "smtp.gmail.com";
-            //    smtpserver.Port = Convert.ToInt32(587);
-            //    smtpserver.Credentials = new System.Net.NetworkCredential("jhilmil@vtecsys.com", "Jhilmil@92");
-            //    smtpserver.EnableSsl = true;
-            //    smtpserver.Send(message);
-            //}
+            SetPathPermission(pdfFilePath);
+            var htmlToPdf = new NReco.PdfGenerator.HtmlToPdfConverter();
+            htmlToPdf.CustomWkHtmlArgs = "--disable-smart-shrinking" ;
+            htmlToPdf.PageHeight = 215;
+            htmlToPdf.PageWidth = 176;
+            //var margins = new PageMargins();
+            //margins.Bottom = 4;
+            //margins.Top = 4;
+            //margins.Left = 5;
+            //margins.Right = 5;
+            //htmlToPdf.Margins = margins;
+            htmlToPdf.Orientation = NReco.PdfGenerator.PageOrientation.Landscape;
+            htmlToPdf.PageHeaderHtml = string.Format("<h2 align=\"center\"><strong>Salary Slip for the Month of {0}-{1}</strong></h2></br>", DateTime.Now.ToMonthName(), DateTime.Now.Year);
+
+            var pdfBytes = htmlToPdf.GeneratePdf(templateContent);
+            if (pdfBytes != null)
+            {
+                using (FileStream fileStream = new FileStream(finalPdfPath, FileMode.OpenOrCreate))
+                {
+                    fileStream.Write(pdfBytes, 0, pdfBytes.Length);
+                    fileStream.Close();
+                }
+            }
+
             string senderID = "jhilmil.basu92@gmail.com";
             string senderPassword = "Jhilmil@12111992";
             RemoteCertificateValidationCallback orgCallback = ServicePointManager.ServerCertificateValidationCallback;
@@ -184,10 +194,21 @@ namespace SalarySlipApp.Services
                 ServicePointManager.Expect100Continue = true;
                 MailMessage mail = new MailMessage();
                // mail.To.Add("uttam@vtecsys.com");
+
+                Attachment attachment = new Attachment(finalPdfPath,MediaTypeNames.Application.Octet);
+                ContentDisposition disposition = attachment.ContentDisposition;
+                disposition.CreationDate = File.GetCreationTime(finalPdfPath);
+                disposition.ModificationDate = File.GetLastWriteTime(finalPdfPath);
+                disposition.ReadDate = File.GetLastAccessTime(finalPdfPath);
+                disposition.FileName = Path.GetFileName(finalPdfPath);
+                disposition.Size = new FileInfo(finalPdfPath).Length;
+                disposition.DispositionType = DispositionTypeNames.Attachment;
+                mail.Attachments.Add(attachment);
+
                 mail.To.Add("jhilmil@vtecsys.com");
                 mail.From = new MailAddress(senderID);
                 mail.Subject = "My Test Email!";
-                mail.Body = templateContent;
+                mail.Body = string.Format("Salary Slip for the Month of {0}-{1}",DateTime.Now.ToMonthName() ,DateTime.Now.Year);
                 mail.IsBodyHtml = true;
                 SmtpClient smtp = new SmtpClient();
                 smtp.Host = "smtp.gmail.com";
@@ -201,6 +222,21 @@ namespace SalarySlipApp.Services
             {
                 Console.WriteLine(ex.Message);
             }  
+        }
+
+        private void SetPathPermission(string pdfFilePath)
+        {
+            var directoryInfo = new DirectoryInfo(pdfFilePath);
+            var accessControl = directoryInfo.GetAccessControl();
+            var userIdentity = WindowsIdentity.GetCurrent();
+            var permissions = new FileSystemAccessRule(userIdentity.Name,
+                                                  FileSystemRights.FullControl,
+                                                  InheritanceFlags.ObjectInherit |
+                                                  InheritanceFlags.ContainerInherit,
+                                                  PropagationFlags.None,
+                                                  AccessControlType.Allow);
+            accessControl.AddAccessRule(permissions);
+            directoryInfo.SetAccessControl(accessControl);
         }
         private bool OnValidateCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
         {
