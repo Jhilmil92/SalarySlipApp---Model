@@ -15,6 +15,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using TemplateApp.Classes;
+using SalarySlipApp.ExtensionClasses;
+using System.Globalization;
 
 namespace SalarySlipApp
 {
@@ -30,6 +32,23 @@ namespace SalarySlipApp
             requiredName.Select();
         }
 
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            PopulateMonths();
+            PopulateYears();
+        }
+
+        private void PopulateMonths()
+        {
+            month.DataSource = DateTime.Now.GetMonths();
+            month.SelectedItem = CultureInfo.InvariantCulture.DateTimeFormat.MonthNames[DateTime.Now.AddMonths(-1).Month - 1];
+        }
+
+        private void PopulateYears()
+        {
+            year.DataSource = Enumerable.Range(1950,DateTime.Now.Year - 1950 + 1).ToList();
+            year.SelectedItem = DateTime.Now.Year;
+        }
         private void generateButton_Click(object sender, EventArgs e)
         {
             if (salary.Text.ToString() != string.Empty)
@@ -43,6 +62,9 @@ namespace SalarySlipApp
                 employeeDetails.AccountNumber = accountNumber.Text.ToString();
                 employeeDetails.Designation = designation.Text.ToString();
                 employeeDetails.Salary = salary.Text.ToString();
+                employeeDetails.EmailId = email.Text.ToString();
+                employeeDetails.Month = month.SelectedItem.ToString();
+                employeeDetails.Year = year.SelectedItem.ToString();
 
                 ICollection<Rules> userAdditionComponents = FetchUserComponents(addOuterPanel.Controls,ComputationVariety.ADDITION);
                 ICollection<Rules> userDeductionComponents = FetchUserComponents(deductOuterPanel.Controls, ComputationVariety.SUBTRACTION);
@@ -51,7 +73,7 @@ namespace SalarySlipApp
                 ICollection<Rules> finalResults = PopulateGrid(computedRules,userAdditionComponents,userDeductionComponents);
                 string templateContent = salaryService.CollectTemplateData(employeeDetails,finalResults);
 
-                salaryService.SendTemplate(templateContent);
+                salaryService.SendTemplate(employeeDetails,templateContent);
                 //Mail Content;
             }
 
@@ -443,5 +465,6 @@ namespace SalarySlipApp
                 deductComponentNumber.Focus();
             }
         }
+
     }
 }

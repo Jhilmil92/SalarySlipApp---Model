@@ -149,7 +149,7 @@ namespace SalarySlipApp.Services
         }
 
 
-        public void SendTemplate(string templateContent)
+        public void SendTemplate(EmployeeDetails employeeDetails,string templateContent)
         {
             string pdfFileName = string.Format("{0}{1:dd-MMM-yyyy HH-mm-ss-fff}{2}", "SalarySlip", DateTime.Now,".pdf");
             string pdfFilePath = @"e:\SalarySlips\";
@@ -165,14 +165,8 @@ namespace SalarySlipApp.Services
             htmlToPdf.CustomWkHtmlArgs = "--disable-smart-shrinking" ;
             htmlToPdf.PageHeight = 215;
             htmlToPdf.PageWidth = 176;
-            //var margins = new PageMargins();
-            //margins.Bottom = 4;
-            //margins.Top = 4;
-            //margins.Left = 5;
-            //margins.Right = 5;
-            //htmlToPdf.Margins = margins;
             htmlToPdf.Orientation = NReco.PdfGenerator.PageOrientation.Landscape;
-            htmlToPdf.PageHeaderHtml = string.Format("<h2 align=\"center\"><strong>Salary Slip for the Month of {0}-{1}</strong></h2></br>", DateTime.Now.ToMonthName(), DateTime.Now.Year);
+            //htmlToPdf.PageHeaderHtml = string.Format("<h2 align=\"center\"><strong>Salary Slip for the Month of {0}-{1}</strong></h2></br>", DateTime.Now.ToMonthName(), DateTime.Now.Year);
 
             var pdfBytes = htmlToPdf.GeneratePdf(templateContent);
             if (pdfBytes != null)
@@ -205,10 +199,11 @@ namespace SalarySlipApp.Services
                 disposition.DispositionType = DispositionTypeNames.Attachment;
                 mail.Attachments.Add(attachment);
 
-                mail.To.Add("jhilmil@vtecsys.com");
+                mail.To.Add(employeeDetails.EmailId);
                 mail.From = new MailAddress(senderID);
                 mail.Subject = "My Test Email!";
-                mail.Body = string.Format("Salary Slip for the Month of {0}-{1}",DateTime.Now.ToMonthName() ,DateTime.Now.Year);
+                //mail.Body = string.Format("Salary Slip for the Month of {0}-{1}",DateTime.Now.ToMonthName() ,DateTime.Now.Year);
+                mail.Body = "Salary Slip";
                 mail.IsBodyHtml = true;
                 SmtpClient smtp = new SmtpClient();
                 smtp.Host = "smtp.gmail.com";

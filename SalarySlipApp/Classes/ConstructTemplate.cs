@@ -32,6 +32,8 @@ namespace TemplateApp.Classes
             templateBody = templateBody.Replace("$designation", employeeDetails.Designation);
             templateBody = templateBody.Replace("$accountNumber", employeeDetails.AccountNumber);
             templateBody = templateBody.Replace("$salary", employeeDetails.Salary);
+            templateBody = templateBody.Replace("$month",employeeDetails.Month);
+            templateBody = templateBody.Replace("$year",employeeDetails.Year);
 
             StringBuilder additionBuilder = new StringBuilder();
             StringBuilder subtractionBuilder = new StringBuilder();

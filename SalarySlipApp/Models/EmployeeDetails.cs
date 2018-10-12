@@ -14,5 +14,8 @@ namespace SalarySlipApp.Models
         public string AccountNumber { get; set; }
         public string Designation { get; set; }
         public string Salary { get; set; }
+        public string EmailId { get; set; }
+        public string Month { get; set; }
+        public string Year { get; set; }
     }
 }
