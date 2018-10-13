@@ -41,7 +41,7 @@ namespace SalarySlipApp
         private void PopulateMonths()
         {
             month.DataSource = DateTime.Now.GetMonths();
-            month.SelectedItem = CultureInfo.InvariantCulture.DateTimeFormat.MonthNames[DateTime.Now.AddMonths(-1).Month - 1];
+            month.SelectedItem = CultureInfo.InvariantCulture.DateTimeFormat.MonthNames[DateTime.Now.AddMonths(-1).Month];
         }
 
         private void PopulateYears()
@@ -304,7 +304,8 @@ namespace SalarySlipApp
                 dataGridView.Columns[Constants.addition].Width = 15;
                 dataGridView.Columns[Constants.subtraction].Width = 15;
                 this.Width = 583;
-                this.Height = 497;
+               // this.Height = 497;
+                this.Height = 550;
                 dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
                 dataGridView.Show();
              }  
