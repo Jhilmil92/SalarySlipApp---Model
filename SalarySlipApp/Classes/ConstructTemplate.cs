@@ -12,6 +12,7 @@ using TemplateApplication.Classes;
 using TemplateApplication.Interfaces;
 using Humanizer;
 using System.Globalization;
+using System.Configuration;
 
 namespace TemplateApp.Classes
 {
@@ -44,12 +45,12 @@ namespace TemplateApp.Classes
             {
                if((result.ComputationName == ComputationVariety.ADDITION) && (result.RuleName != Constants.netPay))
                 {
-                    additionBuilder.Append(string.Format("<tr><td>{0}</td><td>{1}</td></tr>", result.RuleName, result.RuleValue));
+                    additionBuilder.Append(string.Format("<tr><td colspan = \"2\">{0}</td><td colspan = \"2\">{1}</td></tr>", result.RuleName, result.RuleValue));
                 }
 
                 if(result.ComputationName == ComputationVariety.SUBTRACTION)
                 {
-                    subtractionBuilder.Append(string.Format("<tr><td>{0}</td><td>{1}</td></tr>", result.RuleName, result.RuleValue));
+                    subtractionBuilder.Append(string.Format("<tr><td colspan = \"2\">{0}</td><td colspan = \"2\">{1}</td></tr>", result.RuleName, result.RuleValue));
                 }
             }
 
@@ -84,7 +85,30 @@ namespace TemplateApp.Classes
             additionBuilder.Append(string.Format("<tr><td colspan=\"1\"><strong>Net Pay in Words:</strong></td><td colspan=\"4\">{0}</td></tr>", value));
             templateBody = templateBody.Replace("$payInWords", additionBuilder.ToString());
             additionBuilder.Clear();
+            templateBody = templateBody.Replace("$contentOfHeader", string.Format("<img src=\"{0}\" alt=\"{1}\" height=\"{2}\" width = \"{3}\">", ConfigurationManager.AppSettings[Constants.headerImage], "No Image Found", 50, 90));
+            templateBody = templateBody.Replace("$contentOfFooter", FetchFooterContent() != null? FetchFooterContent():string.Empty);
             return templateBody;
+        }
+
+        public string FetchFooterContent()
+        {
+            StringBuilder footerContent = new StringBuilder();
+            try
+            {
+                var fileToRead = ConfigurationManager.AppSettings[Constants.footerContent];
+                if (File.Exists(fileToRead))
+                {
+                    using (StreamReader reader = new StreamReader(fileToRead))
+                    {
+                        footerContent.Append(reader.ReadToEnd());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return footerContent.ToString();
         }
     }
 }

@@ -151,33 +151,10 @@ namespace SalarySlipApp.Services
 
         public void SendTemplate(EmployeeDetails employeeDetails,string templateContent)
         {
-            string pdfFileName = string.Format("{0}{1:dd-MMM-yyyy HH-mm-ss-fff}{2}", "SalarySlip", DateTime.Now,".pdf");
             string pdfFilePath = @"e:\SalarySlips\";
+            string pdfFileName = string.Format("{0}{1:dd-MMM-yyyy HH-mm-ss-fff}{2}", "SalarySlip", DateTime.Now, ".pdf");
             string finalPdfPath = Path.Combine(pdfFilePath, pdfFileName);
-
-            if (!(Directory.Exists(pdfFilePath)))
-            {
-                Directory.CreateDirectory(pdfFilePath);
-            }
-
-            SetPathPermission(pdfFilePath);
-            var htmlToPdf = new NReco.PdfGenerator.HtmlToPdfConverter();
-            htmlToPdf.CustomWkHtmlArgs = "--disable-smart-shrinking" ;
-            htmlToPdf.PageHeight = 215;
-            htmlToPdf.PageWidth = 176;
-            htmlToPdf.Orientation = NReco.PdfGenerator.PageOrientation.Landscape;
-            //htmlToPdf.PageHeaderHtml = string.Format("<h2 align=\"center\"><strong>Salary Slip for the Month of {0}-{1}</strong></h2></br>", DateTime.Now.ToMonthName(), DateTime.Now.Year);
-
-            var pdfBytes = htmlToPdf.GeneratePdf(templateContent);
-            if (pdfBytes != null)
-            {
-                using (FileStream fileStream = new FileStream(finalPdfPath, FileMode.OpenOrCreate))
-                {
-                    fileStream.Write(pdfBytes, 0, pdfBytes.Length);
-                    fileStream.Close();
-                }
-            }
-
+            HtmlToPdfConverter(pdfFilePath,pdfFileName,finalPdfPath,templateContent);
             string senderID = "jhilmil.basu92@gmail.com";
             string senderPassword = "Jhilmil@12111992";
             RemoteCertificateValidationCallback orgCallback = ServicePointManager.ServerCertificateValidationCallback;
@@ -187,7 +164,6 @@ namespace SalarySlipApp.Services
                 ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(OnValidateCertificate);
                 ServicePointManager.Expect100Continue = true;
                 MailMessage mail = new MailMessage();
-               // mail.To.Add("uttam@vtecsys.com");
 
                 Attachment attachment = new Attachment(finalPdfPath,MediaTypeNames.Application.Octet);
                 ContentDisposition disposition = attachment.ContentDisposition;
@@ -202,7 +178,6 @@ namespace SalarySlipApp.Services
                 mail.To.Add(employeeDetails.EmailId);
                 mail.From = new MailAddress(senderID);
                 mail.Subject = "My Test Email!";
-                //mail.Body = string.Format("Salary Slip for the Month of {0}-{1}",DateTime.Now.ToMonthName() ,DateTime.Now.Year);
                 mail.Body = "Salary Slip";
                 mail.IsBodyHtml = true;
                 SmtpClient smtp = new SmtpClient();
@@ -212,6 +187,7 @@ namespace SalarySlipApp.Services
                 smtp.EnableSsl = true;
                 smtp.Send(mail);
                 Console.WriteLine("Email Sent Successfully");
+                DeleteSalarySlip(finalPdfPath);
             }
             catch (Exception ex)
             {
@@ -233,6 +209,48 @@ namespace SalarySlipApp.Services
             accessControl.AddAccessRule(permissions);
             directoryInfo.SetAccessControl(accessControl);
         }
+
+        public void HtmlToPdfConverter(string pdfFilePath,string pdfFileName,string finalPdfPath,string templateContent)
+        {
+            if (!(Directory.Exists(pdfFilePath)))
+            {
+                Directory.CreateDirectory(pdfFilePath);
+            }
+
+            SetPathPermission(pdfFilePath);
+            var htmlToPdf = new NReco.PdfGenerator.HtmlToPdfConverter();
+            htmlToPdf.CustomWkHtmlArgs = "--disable-smart-shrinking";
+           // htmlToPdf.PageHeight = 297;
+            htmlToPdf.Size = PageSize.A4;
+           // htmlToPdf.PageWidth = 210;
+            htmlToPdf.Orientation = NReco.PdfGenerator.PageOrientation.Landscape;
+           // htmlToPdf.PageHeaderHtml = string.Format("<img src=\"{0}\" alt=\"{1}\" height=\"{2}\" width = \"{3}\">", ConfigurationManager.AppSettings[Constants.headerImage], "No Image Found", 50, 90);
+            var pdfBytes = htmlToPdf.GeneratePdf(templateContent);
+            if (pdfBytes != null)
+            {
+                using (FileStream fileStream = new FileStream(finalPdfPath, FileMode.OpenOrCreate))
+                {
+                    fileStream.Write(pdfBytes, 0, pdfBytes.Length);
+                    fileStream.Close();
+                }
+            }
+        }
+
+        public void DeleteSalarySlip(string finalPdfFilePath)
+        {
+            try
+            {
+                if (File.Exists(finalPdfFilePath))
+                {
+                    File.Delete(finalPdfFilePath);
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
         private bool OnValidateCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
         {
             return true;

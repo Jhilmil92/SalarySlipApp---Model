@@ -25,5 +25,7 @@ namespace SalarySlipApp.SalarySlip.Common
         public const string grossSalary = "Gross Salary";
         public const string totalDeduction = "Total Deduction";
         public const string netPay = "Net Pay";
+        public const string headerImage = "pdfHeaderImage";
+        public const string footerContent = "footerContent";
     }
 }
