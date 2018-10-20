@@ -5,31 +5,31 @@
     <meta charset="utf-8" />
     <title>Sample Template</title>
     <style>
-        .mainTable,.additionDetails,.subtractionDetails, th, td {
+        .mainTable, .additionDetails, .subtractionDetails, th, td {
             border: 1px solid black;
-            border-collapse : collapse;
+            border-collapse: collapse;
         }
-        th,td
-        {
-            padding : 5px;
-            text-align : left;
+
+        th, td {
+            /*padding: 5px;*/
+            text-align: left;
         }
-        .mainTable
-        {
-            width : 100%;
+
+        .mainTable {
+            width: 100%;
         }
-        .footer
-        {
-            display : table;
-            text-align : center;
-            margin-left :auto;
-            margin-right : auto;
-            margin-top : 19px;
+
+        .footer {
+            display: table;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 19px;
         }
-        hr
-        {
+
+        hr {
             display: block;
-            color : black;
+            color: black;
             margin-top: 1.5em;
             margin-bottom: 0.5em;
             margin-left: auto;
@@ -37,23 +37,27 @@
             border-style: inset;
             border-width: 1px;
         }
-
-        /*footer
+        .additionSum,.subtractionSum
         {
-            position:fixed;
-            bottom:0 ;
-            width: 100%;
-            margin-top : 30px;
+            text-align : center;
+        }
+        /*.leftDiv
+        {
+            float : left;
+        }
+        .rightDiv
+        {
+            float : right;
+        }*/
+        td > div:nth-of-type(odd)
+        {
+            float : left;
         }
 
-        .footery
+        td > div:nth-of-type(even)
         {
-            margin : auto;
-            width : 400px;
-            text-align : center;
-            padding : 10px;
-        }*/
-
+            float : right;
+        }
     </style>
 </head>
 <body>
@@ -107,58 +111,59 @@
             </td>
         </tr>
         <tr>
-            <!--<td colspan="2">
-                <table class="additionDetails">
-                    <caption><strong>Addition Details</strong></caption>
-                    <tr>
-                        <th>
-                            Addition
-                        </th>
-                        <th>
-                            Addition Sum
-                        </th>
-                    </tr>
-                    $additionResult
-                </table>
-            </td>-->
 
-            <td colspan="2">
+            <td colspan="2" class="additionSum">
                 <strong>Addition Sum</strong>
             </td>
-
-            <!--<td colspan="2">
-                <table class="subtractionDetails">
-                    <caption><strong>Subtraction Details</strong></caption>
-                    <tr>
-                        <th>
-                            Subtraction
-                        </th>
-                        <th>
-                            Subtraction Sum
-                        </th>
-                    </tr>
-                    $subtractionResult
-                </table>
-            </td>-->
-            <td colspan="2">
+            <td colspan="2" class="subtractionSum">
                 <strong>Subtraction Sum</strong>
             </td>
         </tr>
-         $additionresult
-         $subtractionresult
-         $netPay
-         $payInWords
+        <tr>
+            <td colspan="2">
+                <div>
+                    Basic Pay
+                </div>
+                <div>
+                    900
+                </div>
+            </td>
+            <td colspan="2">
+                <div>
+                    Tax Deducted at Source
+                </div>
+                <div>
+                    200
+                </div>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="2">
+                <div>
+                    HRA
+                </div>
+                <div>
+                    100
+                </div>
+            </td>
+            <td colspan="2">
+                <div>
+                    Professional Tax
+                </div>
+                <div>
+                    200
+                </div>
+            </td>
+        </tr>
+        $additionAndDeductionComponents
+        $netPay
+        $payInWords
     </table>
-    <br/>
+    <br />
     <text>
         <b>This is a system generated pay slip and doesn't require a signature.</b>
     </text>
-    <!--$employeeSalaryBreakup-->
-    <!--<footer align="center">
-        <div class="footery">
-            $contentOfFooter
-        </div>
-    </footer>-->
     <hr>
     <div class="footer" align="center">
         $contentOfFooter
