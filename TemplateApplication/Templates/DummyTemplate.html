@@ -5,12 +5,12 @@
     <meta charset="utf-8" />
     <title>Sample Template</title>
     <style>
-        .mainTable, .additionDetails, .subtractionDetails, th, td {
+        .mainTable, .additionDetails, .subtractionDetails, th, td{
             border: 1px solid black;
             border-collapse: collapse;
         }
 
-        th, td {
+        th/*, td*/ {
             /*padding: 5px;*/
             text-align: left;
         }
@@ -52,25 +52,31 @@
         td > div:nth-of-type(odd)
         {
             float : left;
+            border-right:1px solid #000;
         }
 
         td > div:nth-of-type(even)
         {
             float : right;
         }
+        /*td>div
+        {
+            width:50%;
+            border-right:1px solid #000;
+        }*/
     </style>
 </head>
 <body>
     <header>
         $contentOfHeader
     </header>
-    <table class="mainTable" align="center">
+    <table class="mainTable" align="center" cellpadding="0" cellspacing="0">
         <tr>
             <th colspan="4" align="center" style="text-align:center">
                 SALARY SLIP FOR THE MONTH OF $month-$year
             </th>
         </tr>
-        <tr>
+        <!--<tr>
             <td>
                 <strong>Pay to:</strong>
             </td>
@@ -99,8 +105,45 @@
             <td>
                 $accountNumber
             </td>
+        </tr>-->
+        <tr>
+            <td colspan="2">
+                <div>
+                    <strong>Pay to:</strong>
+                </div>
+                <div>
+                    $name
+                </div>
+            </td>
+            <td colspan="2">
+                <div>
+                    <strong>PAN:</strong>
+                </div>
+                <div>
+                    $panNumber
+                </div>
+            </td>
         </tr>
         <tr>
+            <td colspan="2">
+                <div>
+                    <strong>Designation:</strong>
+                </div>
+                <div>
+                    $designation
+                </div>
+            </td>
+            <td colspan="2">
+                <div>
+                    <strong>Account Number :</strong>
+                </div>
+                <div>
+                    $accountNumber
+                </div>
+            </td>
+        </tr>
+
+        <!--<tr>
             <td colspan="2">
                 <strong>
                     Salary :
@@ -109,14 +152,34 @@
             <td colspan="2">
                 $salary
             </td>
-        </tr>
+        </tr>-->
         <tr>
+        <td colspan="4">
+            <div>
+                <strong>Salary :</strong>
+            </div>
+            <div>
+                $salary
+            </div>
+        </td>
+        </tr>
+        <!--<tr>
 
             <td colspan="2" class="additionSum">
                 <strong>Addition Sum</strong>
             </td>
             <td colspan="2" class="subtractionSum">
                 <strong>Subtraction Sum</strong>
+            </td>
+        </tr>-->
+        <tr>
+            <td colspan="4">
+                <div>
+                    <strong>Addition Sum</strong>
+                </div>
+                <div>
+                    <strong>Subtraction Sum</strong>
+                </div>
             </td>
         </tr>
         <tr>

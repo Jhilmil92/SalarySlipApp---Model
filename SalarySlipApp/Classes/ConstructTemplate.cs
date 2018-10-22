@@ -84,70 +84,130 @@ namespace TemplateApp.Classes
 
             //New set of code -- Start.
 
-            StringBuilder additionBuilder = new StringBuilder();
-            StringBuilder subtractionBuilder = new StringBuilder();
-            //foreach (var result in employeePayDetails)
-            //{
-            //   if((result.ComputationName == ComputationVariety.ADDITION) && (result.RuleName != Constants.netPay))
-            //    {
-            //        genericBuilder.Append(string.Format("<tr><td colspan = \"2\">{0}</td><td colspan = \"2\">{1}</td>", result.RuleName, result.RuleValue));
-            //    }
-
-            //    if(result.ComputationName == ComputationVariety.SUBTRACTION)
-            //    {
-            //        genericBuilder.Append(string.Format("<td colspan = \"2\">{0}</td><td colspan = \"2\">{1}</td></tr>", result.RuleName, result.RuleValue));
-            //    }
-            //}
-
-            var additionPayDetails = employeePayDetails.Where(a => (a.ComputationName == ComputationVariety.ADDITION) && (a.RuleName != Constants.netPay)).ToArray();
-            var deductionPayDetails = employeePayDetails.Where(a => a.ComputationName == ComputationVariety.SUBTRACTION).ToArray();
+            var additionPayDetails = employeePayDetails.Where(a => (a.ComputationName == ComputationVariety.ADDITION) && (a.RuleName != Constants.netPay && a.RuleName != Constants.additionTotal)).ToArray();
+            var deductionPayDetails = employeePayDetails.Where(a => (a.ComputationName == ComputationVariety.SUBTRACTION) && (a.RuleName != Constants.subtractionTotal)).ToArray();
+            var additionTotal = employeePayDetails.Where(a => (a.ComputationName == ComputationVariety.ADDITION) && (a.RuleName == Constants.additionTotal)).ToArray();
+            var deductionTotal = employeePayDetails.Where(a => (a.ComputationName == ComputationVariety.SUBTRACTION) && (a.RuleName == Constants.subtractionTotal)).ToArray();
             //var firstresult = additionPayDetails.Zip(deductionPayDetails, (f, s) => new { f, s });
             //var secondresult = deductionPayDetails.Zip(additionPayDetails, (f, s) => new { f, s });
 
             var interleavedList = additionPayDetails.Interleave(deductionPayDetails).ToList();
 
-            //genericBuilder.Append(string.Format("<td colspan = \"2\"><div>{0}</div><div>{0}</div></td></tr>", string.Empty));
-            int largerCount = interleavedList.Count();
             int beginCounter = -1;
-            int endCounter = 0;
-            for (int i = 0; i < interleavedList.Count; i++ )
+            int endCounter = -1;
+            int largerListCount = 0;
+            if((additionPayDetails != null && additionPayDetails.Count() > 0) && (deductionPayDetails != null && deductionPayDetails.Count() > 0))
             {
-                if (endCounter != interleavedList.Count())
+                largerListCount =  (additionPayDetails.Count() > deductionPayDetails.Count()) ? additionPayDetails.Count() : deductionPayDetails.Count();
+            }
+
+                //for (int i = 0; i < interleavedList.Count; i++ )
+                //{
+                //    if ((endCounter+1) != interleavedList.Count()-1)
+                //    {
+                //        if (beginCounter == -1)
+                //        {
+                //            genericBuilder.Append("<tr>");
+                //        }
+
+                //        genericBuilder.Append(string.Format("<td colspan = \"2\"><div>{0}</div><div>{1}</div></td>", interleavedList[i].RuleName, interleavedList[i].RuleValue));
+                //        beginCounter++;
+                //        if (beginCounter == 1)
+                //        {
+                //            genericBuilder.Append("</tr>");
+                //            beginCounter = -1;
+                //        }
+                //    }
+                //    if ((endCounter + 1) == interleavedList.Count() -1)
+                //    {
+                //        if (interleavedList[i].ComputationName == ComputationVariety.ADDITION)
+                //        {
+                //            genericBuilder.Append(string.Format("<td colspan = \"2\"><div>{0}</div><div>{1}</div></td><td colspan = \"2\"><div>{2}</div><div>{2}</div></td></tr>", interleavedList[i].RuleName, interleavedList[i].RuleValue, string.Empty));
+                //        }
+                //        else if (interleavedList[i].ComputationName == ComputationVariety.SUBTRACTION)
+                //        {
+                //            genericBuilder.Append(string.Format("<td colspan = \"2\"><div>{0}</div><div>{0}</div></td><td colspan = \"2\"><div>{1}</div><div>{2}</div></td></tr>", string.Empty, string.Empty, interleavedList[i].RuleName, interleavedList[i].RuleValue));
+                //        }
+                //   }
+                //    endCounter++;
+                //}
+
+                for (int i = 0; i < largerListCount; i++)
                 {
-                    if (beginCounter == -1)
+                    if(beginCounter == -1)
                     {
                         genericBuilder.Append("<tr>");
+                        beginCounter ++;
                     }
-
-                    genericBuilder.Append(string.Format("<td colspan = \"2\"><div>{0}</div><div>{1}</div></td>", interleavedList[i].RuleName, interleavedList[i].RuleValue));
-                    beginCounter++;
-                    if (beginCounter == 1)
+                    if((beginCounter == 0))
                     {
-                        genericBuilder.Append("</tr>");
-                        beginCounter = -1;
+                        if (i < additionPayDetails.Count() && i < deductionPayDetails.Count())
+                        {
+                            if (additionPayDetails[i] != null && deductionPayDetails[i] != null)
+                            {
+                                genericBuilder.Append(string.Format("<td colspan = \"2\"><div>{0}</div><div>{1}</div></td><td colspan = \"2\"><div>{2}</div><div>{3}</div></td></tr>", additionPayDetails[i].RuleName, additionPayDetails[i].RuleValue,deductionPayDetails[i].RuleName,deductionPayDetails[i].RuleValue));
+                                beginCounter = -1;
+                                endCounter++;
+                            }
+                            else if(additionPayDetails[i] != null && deductionPayDetails[i] == null)
+                            {
+                                genericBuilder.Append(string.Format("<td colspan = \"2\"><div>{0}</div><div>{1}</div></td><td colspan = \"2\"><div>{2}</div><div>{2}</div></td></tr>", additionPayDetails[i].RuleName, additionPayDetails[i].RuleValue, string.Empty));
+                                beginCounter = -1;
+                                endCounter++;
+                            }
+                            else if (additionPayDetails[i] == null && deductionPayDetails[i] != null)
+                            {
+                                genericBuilder.Append(string.Format("<td colspan = \"2\"><div>{0}</div><div>{0}</div></td><td colspan = \"2\"><div>{1}</div><div>{2}</div></td></tr>",string.Empty,deductionPayDetails[i].RuleName, deductionPayDetails[i].RuleValue));
+                                beginCounter = -1;
+                                endCounter++;
+                            }
+                        }
+                        else if(i < additionPayDetails.Count() && i == deductionPayDetails.Count())
+                        {
+                            if(additionPayDetails[i] != null)
+                            {
+                                genericBuilder.Append(string.Format("<td colspan = \"2\"><div>{0}</div><div>{1}</div></td><td colspan = \"2\"><div>{2}</div><div>{2}</div></td></tr>", additionPayDetails[i].RuleName, additionPayDetails[i].RuleValue, string.Empty));
+                                beginCounter = -1;
+                                endCounter++;
+                            }
+                        }
+                        else if (i ==  additionPayDetails.Count() && i < deductionPayDetails.Count())
+                        {
+                            if(deductionPayDetails[i] != null)
+                            {
+                                genericBuilder.Append(string.Format("<td colspan = \"2\"><div>{0}</div><div>{0}</div></td><td colspan = \"2\"><div>{1}</div><div>{2}</div></td></tr>", string.Empty, deductionPayDetails[i].RuleName, deductionPayDetails[i].RuleValue));
+                                beginCounter = -1;
+                                endCounter++;
+                            }
+                        }
+                  
                     }
-                    endCounter++;
                 }
-                if (endCounter == interleavedList.Count())
+            if(endCounter == largerListCount - 1)
+            {
+                if((additionTotal != null && additionTotal.Count() > 0) && (deductionTotal != null && deductionTotal.Count() > 0))
                 {
-                    if (interleavedList[i].ComputationName == ComputationVariety.ADDITION)
+                    genericBuilder.Append(string.Format("<tr><td colspan = \"2\"><div>{0}</div><div>{1}</div></td><td colspan = \"2\"><div>{2}</div><div>{3}</div></td></tr>", Constants.grossSalary, additionTotal[0].RuleValue,Constants.totalDeduction, deductionTotal[0].RuleValue));                    
+                }
+                else if ((additionTotal != null && additionTotal.Count() > 0) && (deductionTotal == null || deductionTotal.Count() == 0))
+                {
+                    genericBuilder.Append(string.Format("<tr><td colspan = \"2\"><div>{0}</div><div>{1}</div></td><td colspan = \"2\"><div>{2}</div><div>{2}</div></td></tr>", Constants.grossSalary, additionPayDetails[0].RuleValue, string.Empty));                    
+                }
+                else if ((additionTotal == null || additionTotal.Count() == 0) && (deductionTotal != null && deductionTotal.Count() > 0))
+                {
+                    genericBuilder.Append(string.Format("<tr><td colspan = \"2\"><div>{0}</div><div>{0}</div></td><td colspan = \"2\"><div>{1}</div><div>{2}</div></td></tr>", string.Empty, Constants.totalDeduction, deductionPayDetails[0].RuleValue));                    
+                }
+            }
+                
+               
+                    if (genericBuilder != null && genericBuilder.Length > 0)
                     {
-                        genericBuilder.Append(string.Format("<td colspan = \"2\"><div>{0}</div><div>{1}</div></td><td colspan = \"2\"><div>{2}</div><div>{2}</div></td></tr>", interleavedList[i].RuleName, interleavedList[i].RuleValue, string.Empty));
+                        templateBody = templateBody.Replace("$additionAndDeductionComponents", genericBuilder.ToString());
                     }
-                    else if (interleavedList[i].ComputationName == ComputationVariety.SUBTRACTION)
+                    else
                     {
-                        genericBuilder.Append(string.Format("<td colspan = \"2\"><div>{0}</div><div>{0}</div></td><td colspan = \"2\"><div>{1}</div><div>{2}</div></td></tr>", string.Empty, string.Empty, interleavedList[i].RuleName, interleavedList[i].RuleValue));
+                        templateBody = templateBody.Replace("$additionAndDeductionComponents", string.Empty);
                     }
-               }
-            }
-            if (genericBuilder != null && genericBuilder.Length > 0)
-            {
-                templateBody = templateBody.Replace("$additionAndDeductionComponents", genericBuilder.ToString());
-            }
-            else
-            {
-                templateBody = templateBody.Replace("$additionAndDeductionComponents", string.Empty);
-            }
             genericBuilder.Clear();
             //New set of code -- Stop.
 
@@ -155,11 +215,13 @@ namespace TemplateApp.Classes
             var details = employeePayDetails.Where(a => a.RuleName == Constants.netPay).Select(a => a).ToList();
             var ruleValue = details[0].RuleValue.ToString("#,#.##", System.Globalization.CultureInfo.CreateSpecificCulture("hi-IN"));
             var ruleValueinDecimal = Convert.ToDecimal(ruleValue);
-            genericBuilder.Append(string.Format("<tr><td colspan=\"3\"><strong>{0}:</strong></td><td colspan=\"2\">{1}</td></tr>", details[0].RuleName, ruleValue));
+            //genericBuilder.Append(string.Format("<tr><td colspan=\"3\"><strong>{0}:</strong></td><td colspan=\"2\">{1}</td></tr>", details[0].RuleName, ruleValue));
+            genericBuilder.Append(string.Format("<tr><td colspan=\"4\"><div><strong>{0}:</strong><div>{1}<div></div></td></tr>", details[0].RuleName, ruleValue));
             templateBody = templateBody.Replace("$netPay", genericBuilder.ToString());
             genericBuilder.Clear();
             var value = (NumberToWordsExtension.ToWords((long)ruleValueinDecimal)).Titleize();
-            genericBuilder.Append(string.Format("<tr><td colspan=\"1\"><strong>Net Pay in Words:</strong></td><td colspan=\"4\">{0}</td></tr>", value));
+            //genericBuilder.Append(string.Format("<tr><td colspan=\"1\"><strong>Net Pay in Words:</strong></td><td colspan=\"4\">{0}</td></tr>", value));
+            genericBuilder.Append(string.Format("<tr><td colspan=\"4\"><div><strong>Net Pay in Words:</strong></div><div>{0}</div></td></tr>", value));
             templateBody = templateBody.Replace("$payInWords", genericBuilder.ToString());
             genericBuilder.Clear();
             templateBody = templateBody.Replace("$contentOfHeader", string.Format("<img src=\"{0}\" alt=\"{1}\" height=\"{2}\" width = \"{3}\">", ConfigurationManager.AppSettings[Constants.headerImage], "No Image Found", 50, 90));
