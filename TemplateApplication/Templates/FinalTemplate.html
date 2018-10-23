@@ -1,0 +1,292 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Sample Template</title>
+    <style>
+        .mainTable, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        .mainTable {
+            /*width : 70%;*/
+            font-family: "Calibri";
+            width: 100%;
+            /*font-size : 17px;*/
+        }
+
+        th, td {
+            padding: 4px;
+            text-align: left;
+        }
+
+        tr > td:nth-of-type(2n+1), .bold-font {
+            font-weight: bold;
+        }
+
+        .gross-salary, .salary-deductions {
+            text-align: center;
+        }
+
+        .alignment-style > td:nth-of-type(2n+1), .left-alignment-style {
+            text-align: left;
+        }
+
+        .alignment-style > td:nth-of-type(2n) {
+            text-align: right;
+        }
+
+        .alignment-style-center {
+            text-align: center;
+        }
+
+        .footer {
+            display: table;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 10px;
+            font-family: "Calibri";
+        }
+
+        .message-style {
+            /*text-align: center;*/
+            margin-left: auto;
+            margin-right: auto;
+            font-family: "Calibri";
+            /*padding-left : 200px;*/
+            /*font-size : 17px;*/
+        }
+
+        hr {
+            margin-top: 300px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        $contentOfHeader
+    </header>
+    <br />
+    <table class="mainTable" align="center" cellpadding="0" cellspacing="0">
+        <tr>
+            <th colspan="4" align="center" style="text-align:center">
+                PAY SLIP FOR THE MONTH OF $month-$year
+            </th>
+        </tr>
+        <tr>
+            <td colspan="1">
+                Associate Code :
+            </td>
+            <td colspan="1">
+                VTEC005
+            </td>
+            <td colspan="1">
+                No of days paid :
+            </td>
+            <td colspan="1">
+                30/30
+            </td>
+        </tr>
+        <tr>
+            <td colspan="1">
+                Associate Name :
+            </td>
+            <td colspan="1">
+                $name
+            </td>
+            <td colspan="1">
+                PAN Number :
+            </td>
+            <td colspan="1">
+                $panNumber
+            </td>
+        </tr>
+        <tr>
+            <td colspan="1">
+                Designation :
+            </td>
+            <td colspan="1">
+                $designation
+            </td>
+            <td colspan="1">
+                Account Number :
+            </td>
+            <td colspan="1">
+                $accountNumber
+            </td>
+        </tr>
+        <tr>
+            <td colspan="1">
+                Location :
+            </td>
+            <td colspan="1">
+                Bengaluru
+            </td>
+            <td colspan="1">
+                PF No :
+            </td>
+            <td colspan="1"></td>
+        </tr>
+        <tr>
+            <td colspan="1">
+                Date of Joining :
+            </td>
+            <td colspan="1">
+                $dateOfJoining
+            </td>
+            <td colspan="1"></td>
+            <td colspan="1"></td>
+        </tr>
+        <tr>
+            <td colspan="2" class="gross-salary">
+                Gross Salary
+            </td>
+            <td colspan="2" class="bold-font salary-deductions">
+                Deductions
+            </td>
+        </tr>
+        <!--<tr class="alignment-style">
+            <td colspan="1">
+                Basic :
+            </td>
+            <td colspan="1">
+                5880.00
+            </td>
+            <td colspan="1">
+                Professional Tax :
+            </td>
+            <td colspan="1">
+                200.00
+            </td>
+        </tr>
+
+        <tr class="alignment-style">
+            <td colspan="1">
+                HRA :
+            </td>
+            <td colspan="1">
+                100
+            </td>
+            <td colspan="1">
+                Employee PF :
+            </td>
+            <td colspan="1">
+                0.00
+            </td>
+        </tr>
+        <tr class="alignment-style">
+            <td colspan="1">
+                TA :
+            </td>
+            <td colspan="1">
+                588.00
+            </td>
+            <td colspan="1">
+                Employer PF :
+            </td>
+            <td colspan="1">
+                0.00
+            </td>
+        </tr>
+        <tr class="alignment-style">
+            <td colspan="1">
+                Special Allowance :
+            </td>
+            <td colspan="1">
+                2940.00
+            </td>
+            <td colspan="1"></td>
+            <td colspan="1"></td>
+        </tr>
+        <tr class="alignment-style">
+            <td colspan="1">
+                Medical Allowance :
+            </td>
+            <td colspan="1">
+                1470.00
+            </td>
+            <td colspan="1"></td>
+            <td colspan="1"></td>
+        </tr>
+        <tr class="alignment-style">
+            <td colspan="1">
+                Computer Allowance :
+            </td>
+            <td colspan="1">
+                2058.00
+            </td>
+            <td colspan="1"></td>
+            <td colspan="1"></td>
+        </tr>
+        <tr class="alignment-style">
+            <td colspan="1">
+                Employer PF :
+            </td>
+            <td colspan="1">
+                0.00
+            </td>
+            <td colspan="1"></td>
+            <td colspan="1"></td>
+        </tr>
+        <tr class="alignment-style">
+            <td colspan="1">
+                Employer ESI :
+            </td>
+            <td colspan="1">
+                0.00
+            </td>
+            <td colspan="1"></td>
+            <td colspan="1"></td>
+        </tr>
+        <tr class="alignment-style">
+            <td colspan="1">
+                Gross Salary :
+            </td>
+            <td colspan="1">
+                14700
+            </td>
+            <td colspan="1"></td>
+            <td colspan="1"></td>
+        </tr>
+        <tr class="alignment-style">
+            <td colspan="3">
+                Total Deduction :
+            </td>
+            <td colspan="1">
+                200
+            </td>
+        </tr>
+        <tr class="alignment-style">
+            <td colspan="3">
+                Net Pay :
+            </td>
+            <td colspan="1">
+                14500
+            </td>
+        </tr>
+        <tr>
+            <td colspan="1" class="left-alignment-style">
+                In Words :
+            </td>
+            <td colspan="3" class="alignment-style-center">
+                Ruppees Fourteen Thousand Five Hundred Only.
+            </td>
+        </tr>-->
+
+        $additionAndDeductionComponents
+        $netPay
+        $payInWords
+    </table>
+    <br />
+    <text class="message-style">
+        <b>This is a system generated pay slip and doesn't require a signature.</b>
+    </text>
+    <hr>
+    <div class="footer" align="center">
+        $contentOfFooter
+    </div>
+</body>
+</html>

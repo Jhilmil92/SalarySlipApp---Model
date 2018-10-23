@@ -37,7 +37,7 @@ namespace TemplateApp.Classes
             templateBody = templateBody.Replace("$designation", employeeDetails.Designation);
             templateBody = templateBody.Replace("$accountNumber", employeeDetails.AccountNumber);
             templateBody = templateBody.Replace("$salary", employeeDetails.Salary);
-            templateBody = templateBody.Replace("$month",employeeDetails.Month);
+            templateBody = templateBody.Replace("$month",employeeDetails.Month.ToUpper());
             templateBody = templateBody.Replace("$year",employeeDetails.Year);
 
             
@@ -136,7 +136,7 @@ namespace TemplateApp.Classes
                 {
                     if(beginCounter == -1)
                     {
-                        genericBuilder.Append("<tr>");
+                        genericBuilder.Append("<tr class=\"alignment-style\">");
                         beginCounter ++;
                     }
                     if((beginCounter == 0))
@@ -145,19 +145,21 @@ namespace TemplateApp.Classes
                         {
                             if (additionPayDetails[i] != null && deductionPayDetails[i] != null)
                             {
-                                genericBuilder.Append(string.Format("<td colspan = \"2\"><div>{0}</div><div>{1}</div></td><td colspan = \"2\"><div>{2}</div><div>{3}</div></td></tr>", additionPayDetails[i].RuleName, additionPayDetails[i].RuleValue,deductionPayDetails[i].RuleName,deductionPayDetails[i].RuleValue));
+                                //genericBuilder.Append(string.Format("<td colspan = \"2\"><div>{0}</div><div>{1}</div></td><td colspan = \"2\"><div>{2}</div><div>{3}</div></td></tr>", additionPayDetails[i].RuleName, additionPayDetails[i].RuleValue,deductionPayDetails[i].RuleName,deductionPayDetails[i].RuleValue));
+                                genericBuilder.Append(string.Format("<td colspan = \"1\">{0}</td><td colspan = \"1\">{1}</td><td colspan = \"1\">{2}</td><td colspan = \"1\">{3}</td></tr>", additionPayDetails[i].RuleName, additionPayDetails[i].RuleValue, deductionPayDetails[i].RuleName, deductionPayDetails[i].RuleValue));
+                                
                                 beginCounter = -1;
                                 endCounter++;
                             }
                             else if(additionPayDetails[i] != null && deductionPayDetails[i] == null)
                             {
-                                genericBuilder.Append(string.Format("<td colspan = \"2\"><div>{0}</div><div>{1}</div></td><td colspan = \"2\"><div>{2}</div><div>{2}</div></td></tr>", additionPayDetails[i].RuleName, additionPayDetails[i].RuleValue, string.Empty));
+                                genericBuilder.Append(string.Format("<td colspan = \"1\">{0}</td><td colspan = \"1\">{1}</td><td colspan = \"1\">{2}</td><td colspan = \"1\">{2}</td></tr>", additionPayDetails[i].RuleName, additionPayDetails[i].RuleValue, string.Empty));
                                 beginCounter = -1;
                                 endCounter++;
                             }
                             else if (additionPayDetails[i] == null && deductionPayDetails[i] != null)
                             {
-                                genericBuilder.Append(string.Format("<td colspan = \"2\"><div>{0}</div><div>{0}</div></td><td colspan = \"2\"><div>{1}</div><div>{2}</div></td></tr>",string.Empty,deductionPayDetails[i].RuleName, deductionPayDetails[i].RuleValue));
+                                genericBuilder.Append(string.Format("<td colspan = \"1\">{0}</td><td colspan = \"1\">{0}</td><td colspan = \"2\">{1}</td><td colspan = \"1\">{2}</td></tr>", string.Empty, deductionPayDetails[i].RuleName, deductionPayDetails[i].RuleValue));
                                 beginCounter = -1;
                                 endCounter++;
                             }
@@ -166,7 +168,7 @@ namespace TemplateApp.Classes
                         {
                             if(additionPayDetails[i] != null)
                             {
-                                genericBuilder.Append(string.Format("<td colspan = \"2\"><div>{0}</div><div>{1}</div></td><td colspan = \"2\"><div>{2}</div><div>{2}</div></td></tr>", additionPayDetails[i].RuleName, additionPayDetails[i].RuleValue, string.Empty));
+                                genericBuilder.Append(string.Format("<td colspan = \"1\">{0}</td><td colspan = \"1\">{1}</td><td colspan = \"1\">{2}</td><td colspan = \"1\">{2}</td></tr>", additionPayDetails[i].RuleName, additionPayDetails[i].RuleValue, string.Empty));
                                 beginCounter = -1;
                                 endCounter++;
                             }
@@ -175,7 +177,7 @@ namespace TemplateApp.Classes
                         {
                             if(deductionPayDetails[i] != null)
                             {
-                                genericBuilder.Append(string.Format("<td colspan = \"2\"><div>{0}</div><div>{0}</div></td><td colspan = \"2\"><div>{1}</div><div>{2}</div></td></tr>", string.Empty, deductionPayDetails[i].RuleName, deductionPayDetails[i].RuleValue));
+                                genericBuilder.Append(string.Format("<td colspan = \"1\">{0}</td><td colspan = \"1\">{0}</td><td colspan = \"1\">{1}</td><td colspan = \"1\">{2}</td></tr>", string.Empty, deductionPayDetails[i].RuleName, deductionPayDetails[i].RuleValue));
                                 beginCounter = -1;
                                 endCounter++;
                             }
@@ -187,15 +189,15 @@ namespace TemplateApp.Classes
             {
                 if((additionTotal != null && additionTotal.Count() > 0) && (deductionTotal != null && deductionTotal.Count() > 0))
                 {
-                    genericBuilder.Append(string.Format("<tr><td colspan = \"2\"><div>{0}</div><div>{1}</div></td><td colspan = \"2\"><div>{2}</div><div>{3}</div></td></tr>", Constants.grossSalary, additionTotal[0].RuleValue,Constants.totalDeduction, deductionTotal[0].RuleValue));                    
+                    genericBuilder.Append(string.Format("<tr class=\"alignment-style\"><td colspan = \"1\">{0}</td><td colspan = \"1\">{1}</td><td colspan = \"1\">{2}</td><td colspan = \"1\">{3}</td></tr>", Constants.grossSalary, additionTotal[0].RuleValue, Constants.totalDeduction, deductionTotal[0].RuleValue));                    
                 }
                 else if ((additionTotal != null && additionTotal.Count() > 0) && (deductionTotal == null || deductionTotal.Count() == 0))
                 {
-                    genericBuilder.Append(string.Format("<tr><td colspan = \"2\"><div>{0}</div><div>{1}</div></td><td colspan = \"2\"><div>{2}</div><div>{2}</div></td></tr>", Constants.grossSalary, additionPayDetails[0].RuleValue, string.Empty));                    
+                    genericBuilder.Append(string.Format("<tr class=\"alignment-style\"><td colspan = \"1\">{0}</td><td colspan = \"1\">{1}</td><td colspan = \"1\">{2}</td><td colspan = \"1\">{2}</td></tr>", Constants.grossSalary, additionPayDetails[0].RuleValue, string.Empty));                    
                 }
                 else if ((additionTotal == null || additionTotal.Count() == 0) && (deductionTotal != null && deductionTotal.Count() > 0))
                 {
-                    genericBuilder.Append(string.Format("<tr><td colspan = \"2\"><div>{0}</div><div>{0}</div></td><td colspan = \"2\"><div>{1}</div><div>{2}</div></td></tr>", string.Empty, Constants.totalDeduction, deductionPayDetails[0].RuleValue));                    
+                    genericBuilder.Append(string.Format("<tr class=\"alignment-style\"><td colspan = \"1\">{0}</td><td colspan = \"1\">{0}</td><td colspan = \"1\">{1}</td><td colspan = \"1\">{2}</td></tr>", string.Empty, Constants.totalDeduction, deductionPayDetails[0].RuleValue));                    
                 }
             }
                 
@@ -216,15 +218,15 @@ namespace TemplateApp.Classes
             var ruleValue = details[0].RuleValue.ToString("#,#.##", System.Globalization.CultureInfo.CreateSpecificCulture("hi-IN"));
             var ruleValueinDecimal = Convert.ToDecimal(ruleValue);
             //genericBuilder.Append(string.Format("<tr><td colspan=\"3\"><strong>{0}:</strong></td><td colspan=\"2\">{1}</td></tr>", details[0].RuleName, ruleValue));
-            genericBuilder.Append(string.Format("<tr><td colspan=\"4\"><div><strong>{0}:</strong><div>{1}<div></div></td></tr>", details[0].RuleName, ruleValue));
+            genericBuilder.Append(string.Format("<tr class=\"alignment-style\"><td colspan=\"3\">{0}:</td><td colspan=\"1\">{1}</td></tr>", details[0].RuleName, ruleValue));
             templateBody = templateBody.Replace("$netPay", genericBuilder.ToString());
             genericBuilder.Clear();
             var value = (NumberToWordsExtension.ToWords((long)ruleValueinDecimal)).Titleize();
             //genericBuilder.Append(string.Format("<tr><td colspan=\"1\"><strong>Net Pay in Words:</strong></td><td colspan=\"4\">{0}</td></tr>", value));
-            genericBuilder.Append(string.Format("<tr><td colspan=\"4\"><div><strong>Net Pay in Words:</strong></div><div>{0}</div></td></tr>", value));
+            genericBuilder.Append(string.Format("<tr><td colspan=\"1\" class=\"left-alignment-style\">Net Pay in Words:</td><td colspan=\"3\" class=\"alignment-style-center\">{0}</td></tr>", value));
             templateBody = templateBody.Replace("$payInWords", genericBuilder.ToString());
             genericBuilder.Clear();
-            templateBody = templateBody.Replace("$contentOfHeader", string.Format("<img src=\"{0}\" alt=\"{1}\" height=\"{2}\" width = \"{3}\">", ConfigurationManager.AppSettings[Constants.headerImage], "No Image Found", 50, 90));
+            templateBody = templateBody.Replace("$contentOfHeader", string.Format("<img src=\"{0}\" alt=\"{1}\" height=\"{2}\" width = \"{3}\">", ConfigurationManager.AppSettings[Constants.headerImage], "No Image Found", 60, 100));
             templateBody = templateBody.Replace("$contentOfFooter", FetchFooterContent() != null? FetchFooterContent():string.Empty);
             return templateBody;
         }

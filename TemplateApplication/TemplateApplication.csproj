@@ -52,6 +52,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Templates\DummyTemplate.html" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Templates\SampleTemplate.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Templates\FinalTemplate.html" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

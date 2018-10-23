@@ -17,7 +17,9 @@ namespace TemplateApplication.Classes
             var currentAssembly = typeof(ITemplateProvider).Assembly;
            // _stream = new StreamReader(currentAssembly.GetManifestResourceStream("TemplateApplication.Templates.DefaultTemplate.html"));
             //_stream = new StreamReader(currentAssembly.GetManifestResourceStream("TemplateApplication.Templates.TrialTemplate.html"));
-            _stream = new StreamReader(currentAssembly.GetManifestResourceStream("TemplateApplication.Templates.DummyTemplate.html"));
+            //_stream = new StreamReader(currentAssembly.GetManifestResourceStream("TemplateApplication.Templates.DummyTemplate.html"));
+            //_stream = new StreamReader(currentAssembly.GetManifestResourceStream("TemplateApplication.Templates.SampleTemplate.html"));
+            _stream = new StreamReader(currentAssembly.GetManifestResourceStream("TemplateApplication.Templates.FinalTemplate.html"));
 
             return _stream;
         }

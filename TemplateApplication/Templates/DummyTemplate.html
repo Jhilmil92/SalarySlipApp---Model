@@ -49,21 +49,71 @@
         {
             float : right;
         }*/
-        td > div:nth-of-type(odd)
+        /*td > div:nth-of-type(odd)
         {
             float : left;
             border-right:1px solid #000;
+            display : inline-block;
         }
 
         td > div:nth-of-type(even)
         {
             float : right;
-        }
+            display : inline-block;
+        }*/
         /*td>div
         {
             width:50%;
             border-right:1px solid #000;
         }*/
+        .payTo
+        {
+            /*padding-right : 100px;*/
+            border-right:1px solid #000;
+            float: left;
+            width : 50%;
+        }
+        .designation
+        {
+            /*padding-right : 62px;*/
+            border-right:1px solid #000;
+            float: left;
+            width : 50%;
+        }
+        .salary
+        {
+            /*padding-right : 94px;*/
+            border-right:1px solid #000;
+            float: left;
+            width : 50%;
+        }
+        .dateOfJoining
+        {
+            /*padding-right : 39px;*/
+            border-right:1px solid #000;
+            float: left;
+            width : 50%;
+        }
+        .additionTotal
+        {
+            border-right:1px solid #000;
+        }
+        .subtractionTotal
+        {
+
+        }
+        .pan
+        {
+
+        }
+        .accountNumber
+        {
+
+        }
+        .location
+        {
+
+        }
     </style>
 </head>
 <body>
@@ -108,7 +158,7 @@
         </tr>-->
         <tr>
             <td colspan="2">
-                <div>
+                <div class="payTo">
                     <strong>Pay to:</strong>
                 </div>
                 <div>
@@ -116,7 +166,7 @@
                 </div>
             </td>
             <td colspan="2">
-                <div>
+                <div class="pan">
                     <strong>PAN:</strong>
                 </div>
                 <div>
@@ -126,7 +176,7 @@
         </tr>
         <tr>
             <td colspan="2">
-                <div>
+                <div class="designation">
                     <strong>Designation:</strong>
                 </div>
                 <div>
@@ -134,7 +184,7 @@
                 </div>
             </td>
             <td colspan="2">
-                <div>
+                <div class="accountNumber">
                     <strong>Account Number :</strong>
                 </div>
                 <div>
@@ -154,14 +204,22 @@
             </td>
         </tr>-->
         <tr>
-        <td colspan="4">
-            <div>
-                <strong>Salary :</strong>
+        <td colspan="2">
+            <div class="dateOfJoining">
+                <strong>Date of Joining:</strong>
             </div>
             <div>
-                $salary
+                $dateOfJoining
             </div>
         </td>
+            <td>
+                <div class="location">
+                    <strong>Location:</strong>
+                </div>
+                <div>
+                    $location
+                </div>
+            </td>
         </tr>
         <!--<tr>
 
@@ -174,10 +232,10 @@
         </tr>-->
         <tr>
             <td colspan="4">
-                <div>
+                <div class="additionTotal">
                     <strong>Addition Sum</strong>
                 </div>
-                <div>
+                <div class="subtractionTotal">
                     <strong>Subtraction Sum</strong>
                 </div>
             </td>

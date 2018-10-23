@@ -223,7 +223,7 @@ namespace SalarySlipApp.Services
            // htmlToPdf.PageHeight = 297;
             htmlToPdf.Size = PageSize.A4;
            // htmlToPdf.PageWidth = 210;
-            htmlToPdf.Orientation = NReco.PdfGenerator.PageOrientation.Landscape;
+            htmlToPdf.Orientation = NReco.PdfGenerator.PageOrientation.Portrait;
            // htmlToPdf.PageHeaderHtml = string.Format("<img src=\"{0}\" alt=\"{1}\" height=\"{2}\" width = \"{3}\">", ConfigurationManager.AppSettings[Constants.headerImage], "No Image Found", 50, 90);
             var pdfBytes = htmlToPdf.GeneratePdf(templateContent);
             if (pdfBytes != null)
