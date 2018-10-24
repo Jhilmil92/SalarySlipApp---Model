@@ -96,7 +96,7 @@ namespace SalarySlipApp
                         {
                             ComputationName = typeOfOperation,
                             RuleName = componentParts[1].Split(':')[1],
-                            RuleValue = Convert.ToDecimal(componentParts[2])
+                            RuleValue = Decimal.Round(Convert.ToDecimal(componentParts[2]),2)
                         }
                             );
                     }
@@ -253,7 +253,7 @@ namespace SalarySlipApp
                     if (additionDataRows != null && additionDataRows.Count() > 0)
                     {
                         totalDataRow = dataTable.NewRow();
-                        totalDataRow[Constants.addition] = "Gross Salary";
+                        totalDataRow[Constants.addition] = Constants.grossSalary;
                         totalDataRow[Constants.additionTotal] = additionSum;
                         computedRules.Add(
                            new Rules
@@ -289,14 +289,14 @@ namespace SalarySlipApp
                     {
                         DataRow netPayDataRow = dataTable.NewRow();
                         netPayDataRow[Constants.addition] = Constants.netPay;
-                        netPayDataRow[Constants.additionTotal] = additionSum - subtractionSum;
+                        netPayDataRow[Constants.additionTotal] = Decimal.Round(additionSum - subtractionSum,2);
                         dataTable.Rows.Add(netPayDataRow);
                         computedRules.Add(
                             new Rules
                             {
                                 ComputationName = ComputationVariety.ADDITION,
                                 RuleName = Constants.netPay,
-                                RuleValue = additionSum - subtractionSum
+                                RuleValue = Decimal.Round(additionSum - subtractionSum, 2)
                             });
                     }
                 }

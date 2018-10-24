@@ -45,7 +45,7 @@ namespace SalarySlipApp.Services
                         {
                             componentValueAsString.Append(additionSectionCollection[component]);
                             componentAmount = Convert.ToDecimal(componentValueAsString.Remove(componentValueAsString.Length - 1, 1).ToString());
-                            componentAmount = ((componentAmount) / 100) * salary;
+                            componentAmount = Decimal.Round(((componentAmount) / 100) * salary,2);
                         }
                         computedRules.Add(new Rules
                             {
@@ -111,7 +111,7 @@ namespace SalarySlipApp.Services
                     {
                         componentValueAsString.Append(subtractionSectionCollection[component]);
                         componentAmount = Convert.ToDecimal(componentValueAsString.Remove(componentValueAsString.Length - 1, 1).ToString());
-                        componentAmount = ((componentAmount) / 100) * grossSalary;
+                        componentAmount = Decimal.Round(((componentAmount) / 100) * grossSalary,2);
                     }
                     computedRules.Add(new Rules
                         {
