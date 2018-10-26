@@ -149,7 +149,7 @@ namespace SalarySlipApp.Services
         }
 
 
-        public void SendTemplate(EmployeeDetails employeeDetails,string templateContent)
+        public string SendTemplate(EmployeeDetails employeeDetails,string templateContent)
         {
             string pdfFilePath = @"e:\SalarySlips\";
             string pdfFileName = string.Format("{0}{1:dd-MMM-yyyy HH-mm-ss-fff}{2}", "SalarySlip", DateTime.Now, ".pdf");
@@ -187,12 +187,12 @@ namespace SalarySlipApp.Services
                 smtp.EnableSsl = true;
                 smtp.Send(mail);
                 Console.WriteLine("Email Sent Successfully");
-                DeleteSalarySlip(finalPdfPath);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-            }  
+            }
+            return pdfFilePath;
         }
 
         private void SetPathPermission(string pdfFilePath)
@@ -236,13 +236,20 @@ namespace SalarySlipApp.Services
             }
         }
 
-        public void DeleteSalarySlip(string finalPdfFilePath)
+        public void DeleteSalarySlips(string pdfFilePath)
         {
             try
             {
-                if (File.Exists(finalPdfFilePath))
+                if(Directory.Exists(pdfFilePath))
                 {
-                    File.Delete(finalPdfFilePath);
+                    var directory = new DirectoryInfo(pdfFilePath);
+                    foreach(var file in directory.GetFiles())
+                    {
+                        if(!(IsFileLocked(file)))
+                        {
+                            file.Delete();
+                        }
+                    }
                 }
             }
             catch(Exception ex)
@@ -254,6 +261,39 @@ namespace SalarySlipApp.Services
         private bool OnValidateCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
         {
             return true;
+        }
+
+        public static Boolean IsFileLocked(FileInfo file)
+        {
+            FileStream stream = null;
+
+            try
+            {
+                //Don't change FileAccess to ReadWrite, 
+                //because if a file is in readOnly, it fails.
+                stream = file.Open
+                (
+                    FileMode.Open,
+                    FileAccess.Read,
+                    FileShare.None
+                );
+            }
+            catch (IOException)
+            {
+                //the file is unavailable because it is:
+                //still being written to
+                //or being processed by another thread
+                //or does not exist (has already been processed)
+                return true;
+            }
+            finally
+            {
+                if (stream != null)
+                    stream.Close();
+            }
+
+            //file is not locked
+            return false;
         }
     }
 }

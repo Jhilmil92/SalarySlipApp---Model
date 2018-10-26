@@ -49,6 +49,7 @@ namespace SalarySlipApp
             year.DataSource = Enumerable.Range(1950,DateTime.Now.Year - 1950 + 1).ToList();
             year.SelectedItem = DateTime.Now.Year;
         }
+
         private void generateButton_Click(object sender, EventArgs e)
         {
             if (salary.Text.ToString() != string.Empty)
@@ -73,7 +74,8 @@ namespace SalarySlipApp
                 ICollection<Rules> finalResults = PopulateGrid(computedRules,userAdditionComponents,userDeductionComponents);
                 string templateContent = salaryService.CollectTemplateData(employeeDetails,finalResults);
 
-                salaryService.SendTemplate(employeeDetails,templateContent);
+                string pdfPath = salaryService.SendTemplate(employeeDetails,templateContent);
+                salaryService.DeleteSalarySlips(pdfPath);
                 //Mail Content;
             }
 
@@ -122,7 +124,13 @@ namespace SalarySlipApp
             }
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="computedRules"></param>
+        /// <param name="userAdditionComponents"></param>
+        /// <param name="userDeductionComponents"></param>
+        /// <returns></returns>
         private ICollection<Rules> PopulateGrid(ICollection<Rules> computedRules, ICollection<Rules> userAdditionComponents, ICollection<Rules> userDeductionComponents)
         {
             decimal additionSum = 0.0m;

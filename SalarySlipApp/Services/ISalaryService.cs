@@ -11,6 +11,7 @@ namespace SalarySlipApp.Services
     {
         ICollection<Rules> ComputeRules(decimal salary, ICollection<Rules> userAdditionComponents, ICollection<Rules> userDeductionComponents);
         string CollectTemplateData(EmployeeDetails employeeDetails, ICollection<Rules> employeePayDetails);
-        void SendTemplate(EmployeeDetails employeeDetails,string templateContent);
+        string SendTemplate(EmployeeDetails employeeDetails,string templateContent);
+        void DeleteSalarySlips(string pdfFilePath);
     }
 }
