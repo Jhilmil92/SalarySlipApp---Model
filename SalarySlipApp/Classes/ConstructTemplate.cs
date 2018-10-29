@@ -19,10 +19,19 @@ namespace TemplateApp.Classes
 {
     public class ConstructTemplate
     {
+        /// <summary>
+        /// This method is responsible for replacing placeholders in an html template called "FinalTemplate" with the respective values 
+        /// such as employee details, salary breakup for both addition and deduction components, gross salary,total deductions and the net pay 
+        /// in figures and words.
+        /// </summary>
+        /// <param name="employeeDetails">The employee's personal details and professional details.</param>
+        /// <param name="employeePayDetails">The employee's salary breakup details divided into addition and deduction components</param>
+        /// <returns>The html content having all the placeholders replaced with appropriate values.</returns>
         public string PopulateTemplate(EmployeeDetails employeeDetails, ICollection<Rules> employeePayDetails)
         {
-            int flag = -1;
-            int componentCounter = 0;
+            int beginCounter = -1;
+            int endCounter = -1;
+            int largerListCount = 0;
             string templateBody = string.Empty;
             StringBuilder genericBuilder = new StringBuilder();
 
@@ -88,14 +97,8 @@ namespace TemplateApp.Classes
             var deductionPayDetails = employeePayDetails.Where(a => (a.ComputationName == ComputationVariety.SUBTRACTION) && (a.RuleName != Constants.subtractionTotal)).ToArray();
             var additionTotal = employeePayDetails.Where(a => (a.ComputationName == ComputationVariety.ADDITION) && (a.RuleName == Constants.additionTotal)).ToArray();
             var deductionTotal = employeePayDetails.Where(a => (a.ComputationName == ComputationVariety.SUBTRACTION) && (a.RuleName == Constants.subtractionTotal)).ToArray();
-            //var firstresult = additionPayDetails.Zip(deductionPayDetails, (f, s) => new { f, s });
-            //var secondresult = deductionPayDetails.Zip(additionPayDetails, (f, s) => new { f, s });
 
-            var interleavedList = additionPayDetails.Interleave(deductionPayDetails).ToList();
-
-            int beginCounter = -1;
-            int endCounter = -1;
-            int largerListCount = 0;
+           
             if((additionPayDetails != null && additionPayDetails.Count() > 0) && (deductionPayDetails != null && deductionPayDetails.Count() > 0))
             {
                 largerListCount =  (additionPayDetails.Count() > deductionPayDetails.Count()) ? additionPayDetails.Count() : deductionPayDetails.Count();
@@ -232,6 +235,10 @@ namespace TemplateApp.Classes
             return templateBody;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public string FetchFooterContent()
         {
             StringBuilder footerContent = new StringBuilder();
